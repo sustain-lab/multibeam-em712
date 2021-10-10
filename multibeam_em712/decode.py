@@ -9,8 +9,6 @@ import xml.etree.ElementTree as ET
 import requests
 import dateutil.parser
 
-clear = lambda: os.system('cls')
-
 times = []
 tides = []
 noTides = -1
@@ -861,7 +859,6 @@ def processOneFile(filename):
 
 # I shall not humiliate any developer by documenting this main program.
 # The processing of the datagram takes place in the routine processDatagram.
-clear()
 files = glob.glob('*.kmall')
 for file in files:
 	try:

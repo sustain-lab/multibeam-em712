@@ -854,9 +854,6 @@ def processDatagram(lengtha, chunk):
 		if (dgm_version == 2):
 			processDepthDatagram2(millisec, lengtha, chunk)
 
-def processOneFile(filename):
-	print("")
-
 # I shall not humiliate any developer by documenting this main program.
 # The processing of the datagram takes place in the routine processDatagram.
 files = glob.glob('*.kmall')

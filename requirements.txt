@@ -1,3 +1,7 @@
+matplotlib
+netCDF4
+numpy
 python-dateutil
 requests
 utm
+xarray

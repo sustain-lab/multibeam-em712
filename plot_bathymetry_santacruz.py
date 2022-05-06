@@ -11,49 +11,38 @@ matplotlib.rc('font', size=12)
 
 data_path = 'processed_netcdf'
 
-multibeam_files = glob.glob(data_path + '/*.nc')
+multibeam_files = glob.glob(data_path + '/*2021101[34]*.nc')
 multibeam_files.sort()
 
-lon0, lon1 = -122.12, -122
-lat0, lat1 = 36.9, 37.
+lon0, lon1 = -122.10, -121.98
+lat0, lat1 = 36.91, 36.97
 
 parallels = np.arange(lat0, lat1 + 0.02, 0.02)
 meridians = np.arange(lon0, lon1 + 0.02, 0.02)
 
-fig = plt.figure(figsize=(8, 6))
+fig = plt.figure(figsize=(12, 6))
 map = Basemap(llcrnrlon=lon0, llcrnrlat=lat0, urcrnrlon=lon1, urcrnrlat=lat1, \
               resolution='f')
 map.drawcoastlines()
 map.drawparallels(parallels, labels=~np.isnan(parallels))
 map.drawmeridians(meridians, labels=~np.isnan(meridians))
 
-sc_files = []
+skip = 4
+
 for f in multibeam_files:
-    print('Reading', f)
-    ds = xr.open_dataset(f)
-    lon = np.array(ds.longitude)
-    lat = np.array(ds.latitude)
-    if np.max(lat) < lat0 or np.max(lon) < lon0 or np.min(lon) > lon1:
-        print('Skipping')
-        continue
-    else:
-        sc_files.append(f)
-
-skip = 2
-
-for f in sc_files:
     print('Plotting ', f)
     ds = xr.open_dataset(f)
     lon = np.array(ds.longitude[::skip,::skip])
     lat = np.array(ds.latitude[::skip,::skip])
     depth = np.array(ds.depth[::skip,::skip])
+    depth[depth > 100] = np.nan
 
-    plt.pcolor(lon, lat, depth, vmin=0, vmax=60, cmap=cm.viridis_r)
+    plt.pcolor(lon, lat, depth, vmin=10, vmax=50, cmap=cm.turbo_r)
     del lon, lat, depth, ds
     gc.collect()
 
-plt.colorbar()
+plt.colorbar(shrink=0.7)
 
-fig.suptitle('Santa Cruz bathymetry from shipboard Multibeam EM-712')
+fig.suptitle('Santa Cruz bathymetry from shipboard Multibeam')
 plt.savefig('santacruz_multibeam_bathymetry.png', dpi=300)
 plt.close(fig)

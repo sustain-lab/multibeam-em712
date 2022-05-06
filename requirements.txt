@@ -1,6 +1,11 @@
+basemap
+basemap-data
+basemap-data-hires
 matplotlib
 netCDF4
 numpy
+pyproj
+pyshp
 python-dateutil
 requests
 utm
